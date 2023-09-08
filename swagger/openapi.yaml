@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: TEST API
+servers:
+  - url: http://127.0.0.1:8003
+    description: 開発用mocサーバ
+paths:
+  /users:
+    get:
+      summary: ユーザ情報 一括取得用API
+      tags:
+        - ユーザ
+      operationId: get-users # 必須!!
+      description: hogehoge
+      parameters:
+        - name: is_enabled
+          in: query
+          description: 有効フラグ
+          required: false
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user'
+              example:
+                - id: 1
+                  name: Sato Taro
+                  age: 23
+                  is_enabled: true
+                - id: 2
+                  name: tetsuo yamamoto
+                  age: 26
+                  is_enabled: true
+    post:
+      summary: ユーザ情報 登録用API
+      tags:
+        - ユーザ
+      operationId: post-users
+      description: ユーザ情報を登録します
+      requestBody:
+        description: 登録用データ
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/registerUser'
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+
+components:
+  schemas:
+    user:
+      type: object
+      required: [id, name, age, is_enabled]
+      properties:
+        id:
+          type: integer
+          description: ユーザID
+        name:
+          type: string
+          description: ユーザ名
+        age:
+          type: integer
+          description: 年齢
+          nullable: true
+        is_enabled:
+          type: boolean
+          description: 有効フラグ
+    registerUser:
+      type: object
+      required: [name, age]
+      properties:
+        name:
+          type: string
+          description: ユーザ名
+        age:
+          type: integer
+          description: 年齢
+          nullable: true
+        is_enabled:
+          type: boolean
+          description: 有効フラグ
+    Success:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+    Error:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+    Unauthorized:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: ID token for API
