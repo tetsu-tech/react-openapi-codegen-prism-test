@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useGetUsers } from "./tetsu/tetsuComponents";
+import { useGetUsers,  } from "./tetsu/tetsuComponents";
 
 const queryClient = new QueryClient();
 
